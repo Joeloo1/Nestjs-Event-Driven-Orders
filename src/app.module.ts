@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
+import { BullModule } from '@nestjs/bullmq';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { OrdersService } from './module/orders/orders.service';
 import { OrdersModule } from './module/orders/orders.module';
 import { InventoryModule } from './module/inventory/inventory.module';
@@ -21,6 +22,17 @@ import { AuditModule } from './module/audit/audit.module';
       maxListeners: 10,
       verboseMemoryLeak: true,
       ignoreErrors: false,
+    }),
+
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        connection: {
+          host: config.get<string>('REDIS_HOST', 'localhost'),
+          port: config.get<number>('REDIS_PORT', 6379),
+        },
+      }),
     }),
 
     OrdersModule,
