@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bullmq';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { BullBoardModule } from '@bull-board/nestjs';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { OrdersService } from './module/orders/orders.service';
+import { ExpressAdapter } from '@bull-board/express';
+
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 import { OrdersModule } from './module/orders/orders.module';
 import { InventoryModule } from './module/inventory/inventory.module';
 import { NotificationModule } from './module/notifications/notifications.module';
@@ -34,6 +36,10 @@ import { AuditModule } from './module/audit/audit.module';
         },
       }),
     }),
+    BullBoardModule.forRoot({
+      route: '/queues',
+      adapter: ExpressAdapter,
+    }),
 
     OrdersModule,
     InventoryModule,
@@ -41,6 +47,6 @@ import { AuditModule } from './module/audit/audit.module';
     AuditModule,
   ],
   controllers: [AppController],
-  providers: [AppService, OrdersService],
+  providers: [AppService],
 })
 export class AppModule {}
