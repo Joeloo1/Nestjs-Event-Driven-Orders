@@ -20,6 +20,8 @@ export class InventoryProcessor extends WorkerHost {
       `Reserving stock for order ${event.orderId} (${event.items.length} items(s)) [attempt ${job.attemptsMade + 1}`,
     );
 
+    await new Promise((resolve) => setTimeout(resolve, 15000));
+
     for (const item of event.items) {
       this.logger.log(
         ` -> Reserved ${item.quantity}X product ${item.productId}`,
