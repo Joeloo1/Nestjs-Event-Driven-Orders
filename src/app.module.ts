@@ -11,6 +11,8 @@ import { OrdersModule } from './module/orders/orders.module';
 import { InventoryModule } from './module/inventory/inventory.module';
 import { NotificationModule } from './module/notifications/notifications.module';
 import { AuditModule } from './module/audit/audit.module';
+import { PaymentModule } from './module/payment/payment.module';
+import { RedisModule } from './common/redis/redis.module';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { AuditModule } from './module/audit/audit.module';
       verboseMemoryLeak: true,
       ignoreErrors: false,
     }),
+
+    RedisModule,
 
     BullModule.forRootAsync({
       imports: [ConfigModule],
@@ -45,6 +49,7 @@ import { AuditModule } from './module/audit/audit.module';
     InventoryModule,
     NotificationModule,
     AuditModule,
+    PaymentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
